@@ -1,0 +1,93 @@
+﻿<Page
+    x:Class="Slot.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Slot"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" Loaded="Page_Loaded">
+
+    <Grid Margin="0,0,0,0" Width="800" Height="480" Background="Black">
+        
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width=".25*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width=".25*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height=".4*" />
+            <RowDefinition Height="1*"  />
+            <RowDefinition Height=".25*" />
+            <RowDefinition Height=".40*" />
+
+        </Grid.RowDefinitions>
+
+      
+
+        <Image x:Name="ITDEVLogo" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Source="Assets/itdev-brand-main-color.png"/>
+
+        <!-- <Image x:Name="AzureSlotsLogo" Grid.Column="2" Grid.Row="0" Source="Assets/azureslots.png"/>
+        -->
+        <TextBlock x:Name="AzureSlotsLogoText" Grid.Column="3" Grid.Row="0" Grid.ColumnSpan="3" Text="Azure Slots!" Foreground="#00abec" FontFamily="Segoe UI Black" FontSize="50"/>
+
+        <Rectangle x:Name="AzureBack0" Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="1" Fill="#00abec" Opacity="0" />
+
+
+
+
+        <Rectangle x:Name="AzureBack1" Grid.Column="1" Grid.Row="1" Fill="White" Opacity="1"/>
+        <Rectangle x:Name="AzureBack2" Grid.Column="2" Grid.Row="1" Fill="White" Opacity="1"/>
+        <Rectangle x:Name="AzureBack3" Grid.Column="3" Grid.Row="1" Fill="White" Opacity="1"/>
+
+
+        <StackPanel HorizontalAlignment="Center" Grid.Column="1" Grid.Row="1" BorderThickness="25">
+        <Image x:Name="FirstImage"  Source="Assets/AzureIconsColor/OMS.png" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill"/>
+        </StackPanel>
+
+
+
+        <StackPanel HorizontalAlignment="Center" Grid.Column="2" Grid.Row="1" BorderThickness="25">
+                <Image x:Name="SecondImage" Grid.Column="2" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill"/>
+
+        </StackPanel>
+
+            <StackPanel HorizontalAlignment="Center" Grid.Column="3" Grid.Row="1" BorderThickness="25">
+
+                <Image x:Name="ThirdImage" Grid.Column="3" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill"/>
+
+        </StackPanel>
+
+        <Image x:Name="FirstFrame" Grid.Column="1" Grid.Row="1" Source="Assets/slotwindow.png" Stretch="Fill"  />
+        <Image x:Name="SecondFrame" Grid.Column="2" Grid.Row="1" Source="Assets/slotwindow.png" Stretch="Fill" />
+        <Image x:Name="ThirdFrame" Grid.Column="3" Grid.Row="1" Source="Assets/slotwindow.png" Stretch="Fill" />
+
+
+
+        <Rectangle x:Name="AzureBack4" Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="2" Fill="#FFFFFF" Opacity="0" />
+
+        <Rectangle x:Name="AzureBack5" Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="3" Fill="White" Opacity="0" />
+
+        <TextBlock x:Name="TxtBlockFirst" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Foreground="White" FontSize="14" FontFamily="Segoe UI Light" FontWeight="Bold"/>
+        <TextBlock x:Name="TxtBlockSecond" Grid.Column="2" Grid.Row="2" HorizontalAlignment="Center" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Foreground="White" FontSize="14" FontFamily="Segoe UI Light" FontWeight="Bold"/>
+        <TextBlock x:Name="TxtBlockThird" Grid.Column="3" Grid.Row="2" HorizontalAlignment="Center" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Foreground="White" FontSize="14" FontFamily="Segoe UI Light" FontWeight="Bold"/>
+
+        <TextBlock x:Name="TxtCredits" Grid.Column="2" Grid.Row="3" HorizontalAlignment="Center" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Foreground="White" FontSize="70" FontFamily="Segoe UI Light" FontWeight="Bold"/>
+        
+        
+        <Button x:Name="button_Bet" Content="Bet" Grid.Column="2"  Grid.Row="3" HorizontalAlignment="Center"  VerticalAlignment="Top" RequestedTheme="Light" Click="button_Play_Click" FontSize="64" Foreground="White" Background="#FF89C402" Opacity="0"/>
+
+        <Button x:Name="button_Play" Content="Play" Grid.Column="3"  Grid.Row="3" HorizontalAlignment="Center"  VerticalAlignment="Top" RequestedTheme="Light" Click="button_Play_Click" FontSize="64" Foreground="White" Background="#FF89C402"/>
+
+        <TextBlock x:Name="TxtBLockWinLostResult" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Center" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Foreground="White" FontSize="16" FontFamily="Segoe UI Light" Opacity="0"/>
+
+        <StackPanel Grid.Column="1" Grid.Row="3">
+            <TextBlock x:Name="TxtDoubleServiceWin" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Double Service Win!" VerticalAlignment="Center" Foreground="White" FontSize="16" FontFamily="Segoe UI Light" Opacity="0"/>
+            <TextBlock x:Name="TxtTripleServiceWin" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Triple Service Win!" VerticalAlignment="Center" Foreground="White" FontSize="16" FontFamily="Segoe UI Light" Opacity="0"/>
+            <TextBlock x:Name="TxtLose" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" TextWrapping="Wrap" Text="You LOSE!" VerticalAlignment="Center" Foreground="White" FontSize="16" FontFamily="Segoe UI Light" Opacity="0"/>
+        </StackPanel>
+
+    </Grid>
+</Page>
