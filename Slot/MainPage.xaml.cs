@@ -132,7 +132,10 @@ namespace Slot
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             SetupImages();
+
+
             myMoney = StartingCredits;
+
 
             UpdateCreditsTextBlock(myMoney.ToString());
 
