@@ -61,7 +61,7 @@ namespace Slot
 
 
 
-        public double myMoney;
+        public double currentCredits;
         public double myCurrentBet;
 
         public System.Collections.Generic.IReadOnlyList<Windows.Storage.StorageFile> AzureIconFiles;
@@ -82,11 +82,12 @@ namespace Slot
         //Game Settings
 
         public double StartingCredits = 5;
+        public double currentBet = 1;
 
         public double DoubleColorPayOut = 2;
         public double TripleColorPayOut = 5;
 
-        public double DoubleServicePayOut = 10;
+        public double DoubleServicePayOut = 5;
         public double TripleServicePayOut = 15;
 
 
@@ -132,14 +133,74 @@ namespace Slot
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             SetupImages();
+            ResetGame();
+
+            
+
+        }
+
+        private void ResetGame()
+        {
 
 
-            myMoney = StartingCredits;
 
 
-            UpdateCreditsTextBlock(myMoney.ToString());
+            FirstImage.Source = null;
+            SecondImage.Source = null;
+            ThirdImage.Source = null;
+
+            currentCredits = StartingCredits;
+            currentBet = 1;
 
 
+            UpdateCreditsTextBlock(currentCredits.ToString());
+            UpdateCurrentBetTextBlock(currentBet.ToString());
+
+            button_Play.IsEnabled = true;
+            button_Bet.IsEnabled = true;
+
+            TxtBet.Opacity = 100;
+            TxtCredits.Opacity = 100;
+
+            var task = Dispatcher.RunAsync(CoreDispatcherPriority.High, async () =>
+            {
+
+                TxtBlockFirst.Text = "";
+                TxtBlockSecond.Text = "";
+                TxtBlockThird.Text = "";
+                TxtRollResult.Text = "Spin to Start!";
+
+            });
+
+
+   
+
+        }
+
+
+        private void button_Bet_Click(object sender, RoutedEventArgs e)
+        {
+            if (currentBet < currentCredits)
+            {
+                currentBet = currentBet + 1;
+                UpdateCurrentBetTextBlock(currentBet.ToString());
+                var PlayButtonSoundTask = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+                {
+                    PlayWavSound("chord.wav");
+                });
+
+
+            }
+            else
+            {
+
+            }
+
+
+            if (currentBet == currentCredits)
+            {
+                button_Bet.IsEnabled = false;
+            }
         }
 
 
@@ -147,19 +208,20 @@ namespace Slot
         {
 
             // GamePlay Logic
-            myMoney = myMoney - 1;
-            UpdateCreditsTextBlock(myMoney.ToString());
+            currentCredits = currentCredits - currentBet;
+            UpdateCreditsTextBlock(currentCredits.ToString());
             Debug.WriteLine("Button Pressed");
 
 
        
             ClearWinLoseTextBlock();
-            
-            TxtDoubleServiceWin.Opacity = 0;
-            TxtTripleServiceWin.Opacity = 0;
-            TxtLose.Opacity = 0;
+            ClearBetTextBlock();
 
-            
+            // TxtDoubleServiceWin.Opacity = 0;
+            //   TxtTripleServiceWin.Opacity = 0;
+            //   TxtLose.Opacity = 0;
+
+
             button_Play.IsEnabled = false;
             button_Bet.IsEnabled = false;
             CurrentTPCount = 0;
@@ -421,6 +483,27 @@ namespace Slot
         }
 
 
+        private async void UpdateCurrentBetTextBlock(string text)
+        {
+            var WinResultTextBlock = Dispatcher.RunAsync(CoreDispatcherPriority.High, async () =>
+            {
+                TxtBet.Text = text;
+
+            });
+        }
+
+
+        private async void ClearBetTextBlock()
+        {
+            var WinResultTextBlock = Dispatcher.RunAsync(CoreDispatcherPriority.High, async () =>
+            {
+
+                TxtBet.Text = "";
+
+            });
+        }
+
+
 
 
         private async void ClearWinLoseTextBlock()
@@ -444,15 +527,17 @@ namespace Slot
              
                 if (text == "DoubleService")
                 {
-                    TxtDoubleServiceWin.Opacity = 1;
+                    //TxtDoubleServiceWin.Opacity = 1;
+                    TxtRollResult.Text = "Double Service Win!";
                 }
                 if (text == "TripleService")
                 {
-                    TxtTripleServiceWin.Opacity = 1;
+                    //TxtTripleServiceWin.Opacity = 1;
+                    TxtRollResult.Text = "Triple Service Win!";
                 }
                 if (text == "Lose")
                 {
-                    TxtLose.Opacity = 1;
+                    TxtRollResult.Text = "You Lose!";
                 }
 
             });
@@ -482,23 +567,7 @@ namespace Slot
 
             Debug.WriteLine("Results ARE....");
 
-
-   
-
-
-
-            // UpdateWinLossDisplay();
-
-
-
-            //      public string ColorWinResult;
-            //   public string IconWinResult;
-
-
-
-
-
-
+            
             //Debug.WriteLine(AzureColor1 + " " + AzureResult1 + " -- " + AzureColor2 + " " + AzureResult2 + " -- " + AzureColor3 + " " + AzureResult3);
             Debug.WriteLine(AzureResult1 + " -- " + AzureResult2 + " -- " + AzureResult3);
 
@@ -518,7 +587,7 @@ namespace Slot
                 Debug.WriteLine("Triple Color Win!");
                 ColorWinResult = "TripleColorWin";
                 UpdateWinLoseTextBlock("Triple Color Win!!!");
-                myMoney = (myMoney + TripleColorPayOut);
+                currentCredits = (currentCredits + TripleColorPayOut);
                 ShowWinResultItem("TripleColor");
             }
 
@@ -530,7 +599,7 @@ namespace Slot
                     Debug.WriteLine("Double Color Win!");
                     ColorWinResult = "DoubleColorWin";
                     UpdateWinLoseTextBlock("Double Color Win!!!");
-                    myMoney = (myMoney + DoubleColorPayOut);
+                    currentCredits = (currentCredits + DoubleColorPayOut);
                     ShowWinResultItem("DoubleColor");
                 }
             }
@@ -560,7 +629,7 @@ namespace Slot
 
                 IconWinResult = "TripleServiceWin";
                 UpdateWinLoseTextBlock("Triple Azure Service Win!!!");
-                myMoney = (myMoney + TripleServicePayOut);
+                currentCredits = (currentCredits + (TripleServicePayOut + currentBet));
                 ShowWinResultItem("TripleService");
 
             }
@@ -573,21 +642,18 @@ namespace Slot
                     Debug.WriteLine("Double Azure Service Win!");
                     IconWinResult = "Double Azure Service Win";
 
-                    UpdateWinLoseTextBlock("Double Azure Service  Win!");
+                    UpdateWinLoseTextBlock("Double Azure Service Win!");
 
-                    myMoney = (myMoney + DoubleServicePayOut);
+                    currentCredits = (currentCredits + (DoubleServicePayOut + currentBet));
                     ShowWinResultItem("DoubleService");
 
 
                 }
             }
 
-
-
             if (ColorWinResult == "" & IconWinResult == "")
             {
                 Debug.WriteLine("You Lose!");
-                // PlayWavSound("LosingHorn.wav");
                 UpdateWinLoseTextBlock("You Lose!!!");
 
                 var FailSoundTask = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
@@ -620,35 +686,65 @@ namespace Slot
 
 
 
-            UpdateCreditsTextBlock(myMoney.ToString());
+            UpdateCreditsTextBlock(currentCredits.ToString());
 
 
 
 
             var task = Dispatcher.RunAsync(CoreDispatcherPriority.High, async () =>
             {
-                if(myMoney > 0)
+                if(currentCredits > 0)
                 {
                     button_Play.IsEnabled = true;
                     button_Bet.IsEnabled = true;
 
-                 
+                    //Reset Bet
+                    currentBet = 1;
+                    UpdateCurrentBetTextBlock(currentBet.ToString());
 
                 }
-                
+                 else
+                {
+
+                    button_Bet.IsEnabled = false;
+                    button_Play.IsEnabled = false;
+                    UpdateWinLoseTextBlock("BANKRUPT!");
+                    TxtBet.Opacity = 0;
+
+                    var dialog = new ContentDialog()
+                    {
+                        Title = "You are Bankrupt!",
+                        MaxWidth = this.ActualWidth, // Required for Mobile!
+                        Content = "Would you like to try again?"  //YourXamlContent
+                    
+                    };
+
+
+                    dialog.PrimaryButtonText = "OK";
+                    dialog.IsPrimaryButtonEnabled = true;
+                    dialog.PrimaryButtonClick += delegate {
+                        ResetGame();
+                    };
+
+                    var result = await dialog.ShowAsync();
+
+                }
+
 
             });
 
 
 
 
-            
+
             //Transmit Result to Azure
 
 
+          
 
 
-    }
+
+        }
 
 
    private async Task Log_Event(string DataValue, string Name, string Sensor, string DataType, string UnitOfMeasure)
@@ -716,8 +812,7 @@ namespace Slot
 
 
 
-
-
+   
 
 
 

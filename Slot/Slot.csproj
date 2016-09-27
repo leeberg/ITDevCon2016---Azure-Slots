@@ -120,6 +120,7 @@
     <Content Include="Assets\AzureIconsColor\MediaService.png" />
     <Content Include="Assets\AzureIconsColor\NotificationHubs.png" />
     <Content Include="Assets\AzureIconsColor\OMS.png" />
+    <Content Include="Assets\AzureIconsColor\RodTrent.jpg" />
     <Content Include="Assets\AzureIconsColor\SQLDatabase.png" />
     <Content Include="Assets\AzureIconsColor\StreamAnalytics.png" />
     <Content Include="Assets\AzureIconsColor\VirtualMachine.png" />

@@ -8,7 +8,7 @@
     mc:Ignorable="d" Loaded="Page_Loaded">
 
     <Grid Margin="0,0,0,0" Width="800" Height="480" Background="Black">
-        
+
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width=".25*" />
@@ -25,13 +25,13 @@
 
         </Grid.RowDefinitions>
 
-      
+
 
         <Image x:Name="ITDEVLogo" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Source="Assets/itdev-brand-main-color.png"/>
 
         <!-- <Image x:Name="AzureSlotsLogo" Grid.Column="2" Grid.Row="0" Source="Assets/azureslots.png"/>
         -->
-        <TextBlock x:Name="AzureSlotsLogoText" Grid.Column="3" Grid.Row="0" Grid.ColumnSpan="3" Text="Azure Slots!" Foreground="#00abec" FontFamily="Segoe UI Black" FontSize="50"/>
+        <TextBlock x:Name="AzureSlotsLogoText" Grid.Column="3" Grid.Row="0" Grid.ColumnSpan="2" Text="Azure Slots!" Foreground="#00abec" FontSize="50" Margin="0,10,0,224" Grid.RowSpan="2"/>
 
         <Rectangle x:Name="AzureBack0" Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="1" Fill="#00abec" Opacity="0" />
 
@@ -44,19 +44,19 @@
 
 
         <StackPanel HorizontalAlignment="Center" Grid.Column="1" Grid.Row="1" BorderThickness="25">
-        <Image x:Name="FirstImage"  Source="Assets/AzureIconsColor/OMS.png" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill"/>
+            <Image x:Name="FirstImage"  Source="Assets/AzureIconsColor/OMS.png" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill"/>
         </StackPanel>
 
 
 
         <StackPanel HorizontalAlignment="Center" Grid.Column="2" Grid.Row="1" BorderThickness="25">
-                <Image x:Name="SecondImage" Grid.Column="2" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill"/>
+            <Image x:Name="SecondImage" Grid.Column="2" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill"/>
 
         </StackPanel>
 
-            <StackPanel HorizontalAlignment="Center" Grid.Column="3" Grid.Row="1" BorderThickness="25">
+        <StackPanel HorizontalAlignment="Center" Grid.Column="3" Grid.Row="1" BorderThickness="25">
 
-                <Image x:Name="ThirdImage" Grid.Column="3" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill"/>
+            <Image x:Name="ThirdImage" Grid.Column="3" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill"/>
 
         </StackPanel>
 
@@ -74,20 +74,30 @@
         <TextBlock x:Name="TxtBlockSecond" Grid.Column="2" Grid.Row="2" HorizontalAlignment="Center" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Foreground="White" FontSize="14" FontFamily="Segoe UI Light" FontWeight="Bold"/>
         <TextBlock x:Name="TxtBlockThird" Grid.Column="3" Grid.Row="2" HorizontalAlignment="Center" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Foreground="White" FontSize="14" FontFamily="Segoe UI Light" FontWeight="Bold"/>
 
-        <TextBlock x:Name="TxtCredits" Grid.Column="2" Grid.Row="3" HorizontalAlignment="Center" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Foreground="White" FontSize="70" FontFamily="Segoe UI Light" FontWeight="Bold"/>
-        
-        
-        <Button x:Name="button_Bet" Content="Bet" Grid.Column="2"  Grid.Row="3" HorizontalAlignment="Center"  VerticalAlignment="Top" RequestedTheme="Light" Click="button_Play_Click" FontSize="64" Foreground="White" Background="#FF89C402" Opacity="0"/>
+        <TextBlock x:Name="TxtCredits" Grid.Column="2" Grid.Row="3" HorizontalAlignment="LEFT" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Foreground="White" FontSize="70" FontFamily="Segoe UI Light" FontWeight="Bold"/>
+        <Button x:Name="button_Bet" Content="Bet" Grid.Column="2"  Grid.Row="3" HorizontalAlignment="RIGHT"  VerticalAlignment="Top" RequestedTheme="Light" Click="button_Bet_Click" FontSize="64" Foreground="White" Background="#FF89C402" Opacity="1"/>
 
-        <Button x:Name="button_Play" Content="Play" Grid.Column="3"  Grid.Row="3" HorizontalAlignment="Center"  VerticalAlignment="Top" RequestedTheme="Light" Click="button_Play_Click" FontSize="64" Foreground="White" Background="#FF89C402"/>
+        <TextBlock x:Name="TxtBet" Grid.Column="3" Grid.Row="3" HorizontalAlignment="LEFT" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Foreground="White" FontSize="70" FontFamily="Segoe UI Light" FontWeight="Bold"/>
+        <Button x:Name="button_Play" Content="Spin" Grid.Column="3"  Grid.Row="3" HorizontalAlignment="RIGHT"  VerticalAlignment="Top" RequestedTheme="Light" Click="button_Play_Click" FontSize="64" Foreground="White" Background="#FF89C402"/>
 
         <TextBlock x:Name="TxtBLockWinLostResult" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Center" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Foreground="White" FontSize="16" FontFamily="Segoe UI Light" Opacity="0"/>
-
+        <!--
         <StackPanel Grid.Column="1" Grid.Row="3">
-            <TextBlock x:Name="TxtDoubleServiceWin" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Double Service Win!" VerticalAlignment="Center" Foreground="White" FontSize="16" FontFamily="Segoe UI Light" Opacity="0"/>
-            <TextBlock x:Name="TxtTripleServiceWin" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Triple Service Win!" VerticalAlignment="Center" Foreground="White" FontSize="16" FontFamily="Segoe UI Light" Opacity="0"/>
-            <TextBlock x:Name="TxtLose" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" TextWrapping="Wrap" Text="You LOSE!" VerticalAlignment="Center" Foreground="White" FontSize="16" FontFamily="Segoe UI Light" Opacity="0"/>
+       
+                <TextBlock x:Name="TxtDoubleServiceWin" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Double Service Win!" VerticalAlignment="Center" Foreground="White" FontSize="16" FontFamily="Segoe UI Light" Opacity="0"/>
+                <TextBlock x:Name="TxtTripleServiceWin" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Triple Service Win!" VerticalAlignment="Center" Foreground="White" FontSize="16" FontFamily="Segoe UI Light" Opacity="0"/>
+                <TextBlock x:Name="TxtLose" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" TextWrapping="Wrap" Text="You LOSE!" VerticalAlignment="Center" Foreground="White" FontSize="16" FontFamily="Segoe UI Light" Opacity="0"/>
+        
+            
         </StackPanel>
+    -->
+        <TextBlock x:Name="TxtRollResult" Grid.Column="1" Grid.Row="3" Text="" VerticalAlignment="Center" Foreground="White" FontSize="25" FontFamily="Segoe UI Light" Opacity="1"/>
+        
+        <Border Name="popup" Width="400" VerticalAlignment="Center" Opacity="0" Visibility="Collapsed" HorizontalAlignment="Center" Background="Blue" CornerRadius="10">
+            <TextBlock x:Name="PopupTextBlock" TextWrapping="Wrap" Foreground="White" Text="Welcome to C# Corner" FontSize="32" VerticalAlignment="Center" TextAlignment="Center" Margin="20" />
+        </Border>
+      
 
     </Grid>
+
 </Page>
