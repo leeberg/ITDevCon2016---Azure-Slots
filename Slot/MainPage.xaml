@@ -22,6 +22,7 @@
             <RowDefinition Height="1*"  />
             <RowDefinition Height=".25*" />
             <RowDefinition Height=".40*" />
+            <RowDefinition Height=".05*" />
 
         </Grid.RowDefinitions>
 
@@ -80,6 +81,14 @@
         <TextBlock x:Name="TxtBet" Grid.Column="3" Grid.Row="3" HorizontalAlignment="LEFT" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Foreground="White" FontSize="70" FontFamily="Segoe UI Light" FontWeight="Bold"/>
         <Button x:Name="button_Play" Content="Spin" Grid.Column="3"  Grid.Row="3" HorizontalAlignment="RIGHT"  VerticalAlignment="Top" RequestedTheme="Light" Click="button_Play_Click" FontSize="64" Foreground="White" Background="#FF89C402"/>
 
+        <Button x:Name="button_End" Content="END" Grid.Column="2" HorizontalAlignment="Center"  VerticalAlignment="Center" RequestedTheme="Light" Click="button_End_Click" FontSize="24" Foreground="White" Background="#FF89C402" BorderThickness="0,0,0,0" RenderTransformOrigin="0.5,0.5" Height="40" Margin="443,395,-301,-360" UseLayoutRounding="False" d:LayoutRounding="Auto" Width="75">
+            <Button.RenderTransform>
+                <CompositeTransform Rotation="-90"/>
+            </Button.RenderTransform>
+        </Button>
+
+
+
         <TextBlock x:Name="TxtBLockWinLostResult" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Center" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Foreground="White" FontSize="16" FontFamily="Segoe UI Light" Opacity="0"/>
         <!--
         <StackPanel Grid.Column="1" Grid.Row="3">
@@ -92,12 +101,13 @@
         </StackPanel>
     -->
         <TextBlock x:Name="TxtRollResult" Grid.Column="1" Grid.Row="3" Text="" VerticalAlignment="Center" Foreground="White" FontSize="25" FontFamily="Segoe UI Light" Opacity="1"/>
-        
+
         <Border Name="popup" Width="400" VerticalAlignment="Center" Opacity="0" Visibility="Collapsed" HorizontalAlignment="Center" Background="Blue" CornerRadius="10">
             <TextBlock x:Name="PopupTextBlock" TextWrapping="Wrap" Foreground="White" Text="Welcome to C# Corner" FontSize="32" VerticalAlignment="Center" TextAlignment="Center" Margin="20" />
         </Border>
-      
+
 
     </Grid>
+
 
 </Page>

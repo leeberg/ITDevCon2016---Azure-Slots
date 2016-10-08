@@ -59,6 +59,7 @@ namespace Slot
         public string ColorWinResult;
         public string IconWinResult;
 
+        public string CurrentGameID;
 
 
         public double currentCredits;
@@ -73,7 +74,8 @@ namespace Slot
         public string AzureMode = "Transmit";
         public string internetConnected = "True";
 
-        private const string DeviceConnectionString = "Device Connection String Here";
+        private const string DeviceConnectionString = "HostName=BergHub1.azure-devices.net;DeviceId=BergDevice2;SharedAccessKey=FkcFl9IwAZEqpPZLyOVeQDUOvacXBYhTh17GwdYqfTQ=";
+        
         private const string iotHubUri = "<replace>"; // ! put in value !
         private const string deviceId = "<replace>"; // ! put in value !
         private const string deviceKey = "<replace>"; // ! put in value
@@ -90,10 +92,7 @@ namespace Slot
         public double DoubleServicePayOut = 5;
         public double TripleServicePayOut = 15;
 
-
-
-
-
+        
 
         public MainPage()
         {
@@ -108,7 +107,7 @@ namespace Slot
             public String Name { get; set; }
             public String SensorType { get; set; }
             public String TimeStamp { get; set; }
-            public String DataValue { get; set; }
+            public double DataValue { get; set; }
             public String UnitOfMeasure { get; set; }
             public String Location { get; set; }
             public String DataType { get; set; }
@@ -152,12 +151,14 @@ namespace Slot
             currentCredits = StartingCredits;
             currentBet = 1;
 
+            CurrentGameID = Guid.NewGuid().ToString();
 
             UpdateCreditsTextBlock(currentCredits.ToString());
             UpdateCurrentBetTextBlock(currentBet.ToString());
 
             button_Play.IsEnabled = true;
             button_Bet.IsEnabled = true;
+            button_End.IsEnabled = true; 
 
             TxtBet.Opacity = 100;
             TxtCredits.Opacity = 100;
@@ -172,8 +173,43 @@ namespace Slot
 
             });
 
+           
 
-   
+
+
+            var taskPrepStart = Dispatcher.RunAsync(CoreDispatcherPriority.High, async () =>
+            {
+
+                {
+                 
+
+                    var dialog = new ContentDialog()
+                    {
+                        Title = "Game Ready!",
+                        MaxWidth = this.ActualWidth, // Required for Mobile!
+                        Content = "You have 5 Credits, Click OK to Start!"  //YourXamlContent
+
+                    };
+
+                    dialog.PrimaryButtonText = "OK";
+                    dialog.IsPrimaryButtonEnabled = true;
+                    dialog.PrimaryButtonClick += delegate { Log_Event(currentCredits, "StartGame", "GameEvent", "UserAction", CurrentGameID); };
+
+                    var result = await dialog.ShowAsync();
+
+                   
+
+                }
+
+
+            });
+
+
+
+
+
+
+
 
         }
 
@@ -224,6 +260,7 @@ namespace Slot
 
             button_Play.IsEnabled = false;
             button_Bet.IsEnabled = false;
+            button_End.IsEnabled = false;
             CurrentTPCount = 0;
 
             //Run Win/Lose Logic
@@ -282,6 +319,47 @@ namespace Slot
 
 
         }
+
+
+
+
+        private void button_End_Click(object sender, RoutedEventArgs e)
+        {
+            var task = Dispatcher.RunAsync(CoreDispatcherPriority.High, async () =>
+            {
+             
+                {
+                    Log_Event(currentCredits, "UserStop", "SpinEvent", "UserAction", CurrentGameID);
+
+                    button_Bet.IsEnabled = false;
+                    button_Play.IsEnabled = false;
+                    button_End.IsEnabled = false;
+                    UpdateWinLoseTextBlock("END GAME!");
+                    TxtBet.Opacity = 0;
+
+                    var dialog = new ContentDialog()
+                    {
+                        Title = "You Stopped!",
+                        MaxWidth = this.ActualWidth, // Required for Mobile!
+                        Content = "You have gone home with:" + currentCredits.ToString() + " Credits!"  //YourXamlContent
+
+                    };
+
+                    dialog.PrimaryButtonText = "OK";
+                    dialog.IsPrimaryButtonEnabled = true;
+                    dialog.PrimaryButtonClick += delegate { ResetGame(); };
+
+                    var result = await dialog.ShowAsync();
+
+                }
+
+
+            });
+        }
+
+
+
+
 
 
         private void Timer_Tick(ThreadPoolTimer timer)
@@ -391,6 +469,9 @@ namespace Slot
                 AzureResult1 = AzureResult1.Replace(".png", "");
                 AzureResult2 = AzureResult2.Replace(".png", "");
                 AzureResult3 = AzureResult3.Replace(".png", "");
+                AzureResult1 = AzureResult1.Replace(".jpg", "");
+                AzureResult2 = AzureResult2.Replace(".jpg", "");
+                AzureResult3 = AzureResult3.Replace(".jpg", "");
 
                 TxtBlockFirst.Text = AzureResult1;
                 TxtBlockSecond.Text = AzureResult2;
@@ -632,6 +713,8 @@ namespace Slot
                 currentCredits = (currentCredits + (TripleServicePayOut + currentBet));
                 ShowWinResultItem("TripleService");
 
+                Log_Event(1, "Triple Service Win", "SpinEvent", "UserAction", CurrentGameID);
+                
             }
 
             if (IconWinResult != "TripleServiceWin")
@@ -647,6 +730,8 @@ namespace Slot
                     currentCredits = (currentCredits + (DoubleServicePayOut + currentBet));
                     ShowWinResultItem("DoubleService");
 
+                    //Transmit Result to Azure
+                    Log_Event(1, "Double Service Win", "SpinEvent", "UserAction", CurrentGameID);
 
                 }
             }
@@ -662,7 +747,8 @@ namespace Slot
                     ShowWinResultItem("Lose");
                 });
 
-             
+                Log_Event(1, "Loss", "SpinEvent", "UserAction", CurrentGameID);
+
 
 
             }
@@ -677,15 +763,9 @@ namespace Slot
 
             }
 
-
-
-
-
             ColorWinResult = "";
             IconWinResult = "";
-
-
-
+            
             UpdateCreditsTextBlock(currentCredits.ToString());
 
 
@@ -697,6 +777,7 @@ namespace Slot
                 {
                     button_Play.IsEnabled = true;
                     button_Bet.IsEnabled = true;
+                    button_End.IsEnabled = true;
 
                     //Reset Bet
                     currentBet = 1;
@@ -705,9 +786,11 @@ namespace Slot
                 }
                  else
                 {
+                    Log_Event(0, "Bankrupt", "SpinEvent", "UserAction", CurrentGameID);
 
                     button_Bet.IsEnabled = false;
                     button_Play.IsEnabled = false;
+                    button_End.IsEnabled = false;
                     UpdateWinLoseTextBlock("BANKRUPT!");
                     TxtBet.Opacity = 0;
 
@@ -715,16 +798,13 @@ namespace Slot
                     {
                         Title = "You are Bankrupt!",
                         MaxWidth = this.ActualWidth, // Required for Mobile!
-                        Content = "Would you like to try again?"  //YourXamlContent
+                        Content = "Would you like to play again?"  //YourXamlContent
                     
                     };
-
-
+                    
                     dialog.PrimaryButtonText = "OK";
                     dialog.IsPrimaryButtonEnabled = true;
-                    dialog.PrimaryButtonClick += delegate {
-                        ResetGame();
-                    };
+                    dialog.PrimaryButtonClick += delegate {ResetGame();};
 
                     var result = await dialog.ShowAsync();
 
@@ -735,19 +815,16 @@ namespace Slot
 
 
 
-
-
-            //Transmit Result to Azure
-
-
-          
-
+                        
 
 
         }
 
 
-   private async Task Log_Event(string DataValue, string Name, string Sensor, string DataType, string UnitOfMeasure)
+       
+
+
+   private async Task Log_Event(double DataValue, string Name, string Sensor, string DataType, string UnitOfMeasure)
    {
             Debug.WriteLine("Log!");
 
@@ -785,18 +862,25 @@ namespace Slot
                         string jsoncontent = JsonConvert.SerializeObject(SensorInstance);
 
 
-
-
+                        System.Diagnostics.Debug.WriteLine("Creating Device Client with string:");
+                        System.Diagnostics.Debug.WriteLine(DeviceConnectionString);
                         DeviceClient deviceClient = DeviceClient.CreateFromConnectionString(DeviceConnectionString);
                         
 
                         string dataBuffer;
                         dataBuffer = jsoncontent;
 
+                        System.Diagnostics.Debug.WriteLine("JSON is:");
                         System.Diagnostics.Debug.WriteLine(jsoncontent);
 
 
+
+                        
                         Message eventMessage = new Message(System.Text.Encoding.UTF8.GetBytes(dataBuffer));
+
+                        System.Diagnostics.Debug.WriteLine("event message is:");
+                        System.Diagnostics.Debug.WriteLine(eventMessage.ToString());
+                    
                         await deviceClient.SendEventAsync(eventMessage);
 
 
@@ -810,13 +894,6 @@ namespace Slot
 
         }
 
-
-
-   
-
-
-
-
-
+        
     }
 }
