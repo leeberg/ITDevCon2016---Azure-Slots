@@ -120,7 +120,6 @@
     <Content Include="Assets\AzureIconsColor\MediaService.png" />
     <Content Include="Assets\AzureIconsColor\NotificationHubs.png" />
     <Content Include="Assets\AzureIconsColor\OMS.png" />
-    <Content Include="Assets\AzureIconsColor\RodTrent.jpg" />
     <Content Include="Assets\AzureIconsColor\SQLDatabase.png" />
     <Content Include="Assets\AzureIconsColor\StreamAnalytics.png" />
     <Content Include="Assets\AzureIconsColor\VirtualMachine.png" />
@@ -149,7 +148,10 @@
     <Content Include="Assets\itdev-brand-main-color.png" />
     <Content Include="Assets\slotwindow.png" />
     <Content Include="Assets\Sounds\chord.wav" />
+    <Content Include="Assets\Sounds\haha.wav" />
     <Content Include="Assets\Sounds\LosingHorn.wav" />
+    <Content Include="Assets\Sounds\mariofail.wav" />
+    <Content Include="Assets\Sounds\SadTrom.wav" />
     <Content Include="Assets\Sounds\SlotPull.wav" />
     <Content Include="Assets\Sounds\Win95.wav" />
     <Content Include="Assets\testwtf1.png" />
