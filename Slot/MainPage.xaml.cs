@@ -22,6 +22,10 @@ using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
+using Windows.Devices.Gpio;
+using Windows.Devices.Enumeration;
+
+
 //using Microsoft.ServiceBus.Messaging;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
@@ -78,6 +82,8 @@ namespace Slot
         private const string deviceId = "<replace>"; // ! put in value !
         private const string deviceKey = "<replace>"; // ! put in value
 
+        public string GPIOConnected = "false";
+
         
         //Game Settings
 
@@ -126,11 +132,65 @@ namespace Slot
 
 
 
+        // GPIO controller code
+        private GpioController gpio;
+        private GpioPin LEDAzureResult1;
+        private GpioPin LEDAzureResult2;
+        private GpioPin LEDAzureResult3;
+        private GpioPinValue LEDAzureResult1PinValue = GpioPinValue.High;
+        private GpioPinValue LEDAzureResult2PinValue = GpioPinValue.High;
+        private GpioPinValue LEDAzureResult3PinValue = GpioPinValue.High;
+
+        //LED 
+        const int GPIO_LED1 = 24;
+        const int GPIO_LED2 = 18;
+        const int GPIO_LED3 = 23;
+
+
+
         public MainPage()
         {
             this.InitializeComponent();
             
         }
+
+
+        private void InitGPIO()
+        {
+            Debug.WriteLine("GPIO Starting!");
+            var gpio = GpioController.GetDefault();
+
+            // Show an error if there is no GPIO controller
+            if (gpio == null)
+            {
+                // GpioStatus.Text = "There is no GPIO controller on this device.";
+                Debug.WriteLine("There is no GPIO controller on this device.");
+                return;
+            }
+
+            else
+            {
+
+                Debug.WriteLine("GPIO controller - OK!");
+                //GPIOStatus = "Connected";
+                GPIOConnected = "TRUE";
+                //Setup Status LED
+                LEDAzureResult1 = gpio.OpenPin(GPIO_LED1);
+                LEDAzureResult2 = gpio.OpenPin(GPIO_LED2);
+                LEDAzureResult3 = gpio.OpenPin(GPIO_LED3);
+
+                LEDAzureResult1.SetDriveMode(GpioPinDriveMode.Output);
+                LEDAzureResult1.Write(GpioPinValue.Low);
+                LEDAzureResult2.SetDriveMode(GpioPinDriveMode.Output);
+                LEDAzureResult2.Write(GpioPinValue.Low);
+                LEDAzureResult3.SetDriveMode(GpioPinDriveMode.Output);
+                LEDAzureResult3.Write(GpioPinValue.Low);
+
+            }
+
+
+        }
+
 
 
 
@@ -154,9 +214,13 @@ namespace Slot
             await SetupImages();
             await SetupSounds();
             ResetGame();
+            InitGPIO();
 
 
         }
+
+
+
 
         private void ResetGame()
         {
@@ -377,30 +441,28 @@ namespace Slot
 
             //Load Image Folders
             StorageFolder appInstalledFolder = Windows.ApplicationModel.Package.Current.InstalledLocation;
-            StorageFolder assets = await appInstalledFolder.GetFolderAsync("Assets\\AzureIconsColor");
+            StorageFolder assets = await appInstalledFolder.GetFolderAsync("Assets\\azureiconscolor");
             AzureIconFiles = await assets.GetFilesAsync();
 
 
             Debug.WriteLine("DERP!!!");
 
-            Uri ActiveDirectoryURI = new Uri(appInstalledFolder.Path.ToString() + "\\Assets\\AzureIconsColor\\ActiveDirectory.png");
-            Uri AutomationURI = new Uri(appInstalledFolder.Path.ToString() + "\\Assets\\AzureIconsColor\\Automation.png");
-            Uri DataWarehouseURI = new Uri(appInstalledFolder.Path.ToString() + "\\Assets\\AzureIconsColor\\DataWarehouse.png");
-            Uri DevTestLabsURI = new Uri(appInstalledFolder.Path.ToString() + "\\Assets\\AzureIconsColor\\DevTestLabs.png");
-            Uri EventHubsURI = new Uri(appInstalledFolder.Path.ToString() + "\\Assets\\AzureIconsColor\\EventHubs.png");
-            Uri IoTHubURI = new Uri(appInstalledFolder.Path.ToString() + "\\Assets\\AzureIconsColor\\IoTHub.png");
-            Uri MachineLearningURI = new Uri(appInstalledFolder.Path.ToString() + "\\Assets\\AzureIconsColor\\MachineLearning.png");
-            Uri MediaServiceURI = new Uri(appInstalledFolder.Path.ToString() + "\\Assets\\AzureIconsColor\\MediaService.png");
-            Uri NotificationHubsURI = new Uri(appInstalledFolder.Path.ToString() + "\\Assets\\AzureIconsColor\\NotificationHubs.png");
-            Uri OMSURI = new Uri(appInstalledFolder.Path.ToString() + "\\Assets\\AzureIconsColor\\OMS.png");
-            Uri SQLDatabaseURI = new Uri(appInstalledFolder.Path.ToString() + "\\Assets\\AzureIconsColor\\SQLDatabase.png");
-            Uri StreamAnalyticsURI = new Uri(appInstalledFolder.Path.ToString() + "\\Assets\\AzureIconsColor\\StreamAnalytics.png");
-            Uri VirtualMachineURI = new Uri(appInstalledFolder.Path.ToString() + "\\Assets\\AzureIconsColor\\VirtualMachine.png");
+            Uri ActiveDirectoryURI = new Uri(appInstalledFolder.Path.ToString() + "\\assets\\azureiconscolor\\activedirectory.png");
+            Uri AutomationURI = new Uri(appInstalledFolder.Path.ToString() + "\\assets\\azureiconscolor\\automation.png");
+            Uri DataWarehouseURI = new Uri(appInstalledFolder.Path.ToString() + "\\Assets\\azureiconscolor\\dataWarehouse.png");
+            Uri DevTestLabsURI = new Uri(appInstalledFolder.Path.ToString() + "\\Assets\\azureiconscolor\\DevTestLabs.png");
+            Uri EventHubsURI = new Uri(appInstalledFolder.Path.ToString() + "\\Assets\\azureiconscolor\\EventHubs.png");
+            Uri IoTHubURI = new Uri(appInstalledFolder.Path.ToString() + "\\Assets\\azureiconscolor\\IoTHub.png");
+            Uri MachineLearningURI = new Uri(appInstalledFolder.Path.ToString() + "\\Assets\\azureiconscolor\\MachineLearning.png");
+            Uri MediaServiceURI = new Uri(appInstalledFolder.Path.ToString() + "\\Assets\\azureiconscolor\\MediaService.png");
+            Uri NotificationHubsURI = new Uri(appInstalledFolder.Path.ToString() + "\\Assets\\azureiconscolor\\NotificationHubs.png");
+            Uri OMSURI = new Uri(appInstalledFolder.Path.ToString() + "\\Assets\\azureiconscolor\\OMS.png");
+            Uri SQLDatabaseURI = new Uri(appInstalledFolder.Path.ToString() + "\\Assets\\azureiconscolor\\SQLDatabase.png");
+            Uri StreamAnalyticsURI = new Uri(appInstalledFolder.Path.ToString() + "\\Assets\\azureiconscolor\\StreamAnalytics.png");
+            Uri VirtualMachineURI = new Uri(appInstalledFolder.Path.ToString() + "\\Assets\\azureiconscolor\\VirtualMachine.png");
 
 
-
-
-            Debug.WriteLine(ActiveDirectoryURI.ToString());
+           Debug.WriteLine(ActiveDirectoryURI.ToString());
 
 
             ActiveDirectory = new BitmapImage(ActiveDirectoryURI);
@@ -551,144 +613,167 @@ namespace Slot
                 TxtBlockThird.Text = AzureResult3;
 
 
+             
 
+               
 
-                switch (AzureResult1)
+                switch (AzureResult1.ToLower())
                 {
-                    case "ActiveDirectory":
+                    case "activedirectory":
                         FirstImage.Source = ActiveDirectory;
                         break;
-                    case "Automation":
+                    case "automation":
                         FirstImage.Source = Automation;
                         break;
-                    case "DataWarehouse":
+                    case "datawarehouse":
                         FirstImage.Source = DataWarehouse;
                         break;
-                    case "DevTestLabs":
+                    case "devtestlabs":
                         FirstImage.Source = DevTestLabs;
                         break;
-                    case "EventHubs":
+                    case "eventhubs":
                         FirstImage.Source = EventHubs;
                         break;
-                    case "IoTHub":
+                    case "iothub":
                         FirstImage.Source = IoTHub;
                         break;
-                    case "MediaService":
+                    case "mediaservice":
                         FirstImage.Source = MediaService;
                         break;
-                    case "NotificationHubs":
+                    case "notificationhubs":
                         FirstImage.Source = NotificationHubs;
                         break;
-                    case "OMS":
+                    case "oms":
                         FirstImage.Source = OMS;
                         break;
-                    case "SQLDatabase":
+                    case "sqldatabase":
                         FirstImage.Source = SQLDatabase;
                         break;
-                    case "StreamAnalytics":
+                    case "streamanalytics":
                         FirstImage.Source = StreamAnalytics;
                         break;
-                    case "VirtualMachine":
+                    case "virtualmachine":
                         FirstImage.Source = VirtualMachine;
                         break;
-                    case "MachineLearning":
+                    case "machinelearning":
                         FirstImage.Source = MachineLearning;
                         break;
 
                 }
 
-                switch (AzureResult2)
+
+                
+                switch (AzureResult2.ToLower())
                 {
-                    case "ActiveDirectory":
+                    case "activedirectory":
                         SecondImage.Source = ActiveDirectory;
                         break;
-                    case "Automation":
+                    case "automation":
                         SecondImage.Source = Automation;
                         break;
-                    case "DataWarehouse":
+                    case "datawarehouse":
                         SecondImage.Source = DataWarehouse;
                         break;
-                    case "DevTestLabs":
+                    case "devtestlabs":
                         SecondImage.Source = DevTestLabs;
                         break;
-                    case "EventHubs":
+                    case "eventhubs":
                         SecondImage.Source = EventHubs;
                         break;
-                    case "IoTHub":
+                    case "iothub":
                         SecondImage.Source = IoTHub;
                         break;
-                    case "MediaService":
+                    case "mediaservice":
                         SecondImage.Source = MediaService;
                         break;
-                    case "NotificationHubs":
+                    case "notificationhubs":
                         SecondImage.Source = NotificationHubs;
                         break;
-                    case "OMS":
+                    case "oms":
                         SecondImage.Source = OMS;
                         break;
-                    case "SQLDatabase":
+                    case "sqldatabase":
                         SecondImage.Source = SQLDatabase;
                         break;
-                    case "StreamAnalytics":
+                    case "streamanalytics":
                         SecondImage.Source = StreamAnalytics;
                         break;
-                    case "VirtualMachine":
+                    case "virtualmachine":
                         SecondImage.Source = VirtualMachine;
                         break;
-                    case "MachineLearning":
+                    case "machinelearning":
                         FirstImage.Source = MachineLearning;
                         break;
 
                 }
 
-                switch (AzureResult3)
+
+                switch (AzureResult3.ToLower())
                 {
-                    case "ActiveDirectory":
+                    case "activedirectory":
                         ThirdImage.Source = ActiveDirectory;
                         break;
-                    case "Automation":
+                    case "automation":
                         ThirdImage.Source = Automation;
                         break;
-                    case "DataWarehouse":
+                    case "datawarehouse":
                         ThirdImage.Source = DataWarehouse;
                         break;
-                    case "DevTestLabs":
+                    case "devtestlabs":
                         ThirdImage.Source = DevTestLabs;
                         break;
-                    case "EventHubs":
+                    case "eventhubs":
                         ThirdImage.Source = EventHubs;
                         break;
-                    case "IoTHub":
+                    case "iothub":
                         ThirdImage.Source = IoTHub;
                         break;
-                    case "MediaService":
+                    case "mediaservice":
                         ThirdImage.Source = MediaService;
                         break;
-                    case "NotificationHubs":
+                    case "notificationhubs":
                         ThirdImage.Source = NotificationHubs;
                         break;
-                    case "OMS":
+                    case "oms":
                         ThirdImage.Source = OMS;
                         break;
-                    case "SQLDatabase":
+                    case "sqldatabase":
                         ThirdImage.Source = SQLDatabase;
                         break;
-                    case "StreamAnalytics":
+                    case "streamanalytics":
                         ThirdImage.Source = StreamAnalytics;
                         break;
-                    case "VirtualMachine":
+                    case "virtualmachine":
                         ThirdImage.Source = VirtualMachine;
                         break;
-                    case "MachineLearning":
+                    case "machinelearning":
                         FirstImage.Source = MachineLearning;
                         break;
 
                 }
 
+                
+
+                var taskflash1 = Dispatcher.RunAsync(CoreDispatcherPriority.High, async () =>
+                {
+                    await FlashLED1("fast");
+
+                });
+
+                var taskflash2 = Dispatcher.RunAsync(CoreDispatcherPriority.High, async () =>
+                {
+                    await FlashLED2("fast");
+
+                });
 
 
+                var taskflash3 = Dispatcher.RunAsync(CoreDispatcherPriority.High, async () =>
+                {
+                    await FlashLED3("fast");
 
-
+                });
+                
+                
                 //Uri uri = new Uri(RandIMGString, UriKind.Absolute);
                 //ImageSource imgSource = new BitmapImage(uri);
                 //FirstImage.Source = imgSource;
@@ -700,7 +785,7 @@ namespace Slot
 
                 //Uri uri3 = new Uri(RandIMGString, UriKind.Absolute);
                 //ImageSource imgSource3 = new BitmapImage(uri3);
-//                ThirdImage.Source = imgSource3;
+                //                ThirdImage.Source = imgSource3;
 
 
 
@@ -721,6 +806,85 @@ namespace Slot
 
 
 
+        }
+
+        private async Task FlashLED1(string speed)
+        {
+            if(GPIOConnected == "TRUE")
+            {
+                if (speed == "fast")
+                {
+                    LEDAzureResult1.Write(GpioPinValue.High);
+                    await Task.Delay(50);
+                    LEDAzureResult1.Write(GpioPinValue.Low);
+                }
+                if (speed == "slow")
+                {
+                    LEDAzureResult1.Write(GpioPinValue.High);
+                    await Task.Delay(250);
+                    LEDAzureResult1.Write(GpioPinValue.Low);
+                    await Task.Delay(250);
+                    LEDAzureResult1.Write(GpioPinValue.High);
+                    await Task.Delay(250);
+                    LEDAzureResult1.Write(GpioPinValue.Low);
+                    await Task.Delay(250);
+                    LEDAzureResult1.Write(GpioPinValue.High);
+                    await Task.Delay(250);
+                    LEDAzureResult1.Write(GpioPinValue.Low);
+                }
+            }
+        }
+        private async Task FlashLED2(string speed)
+        {
+            if (GPIOConnected == "TRUE")
+            {
+                if (speed == "fast")
+                {
+                    LEDAzureResult2.Write(GpioPinValue.High);
+                    await Task.Delay(50);
+                    LEDAzureResult2.Write(GpioPinValue.Low);
+                }
+                if (speed == "slow")
+                {
+                    LEDAzureResult2.Write(GpioPinValue.High);
+                    await Task.Delay(250);
+                    LEDAzureResult2.Write(GpioPinValue.Low);
+                    await Task.Delay(250);
+                    LEDAzureResult2.Write(GpioPinValue.High);
+                    await Task.Delay(250);
+                    LEDAzureResult2.Write(GpioPinValue.Low);
+                    await Task.Delay(250);
+                    LEDAzureResult2.Write(GpioPinValue.High);
+                    await Task.Delay(250);
+                    LEDAzureResult2.Write(GpioPinValue.Low);
+                }
+            }
+        }
+        private async Task FlashLED3(string speed)
+        {
+            if (GPIOConnected == "TRUE")
+            {
+                if (speed == "fast")
+                {
+                    LEDAzureResult3.Write(GpioPinValue.High);
+                    await Task.Delay(50);
+                    LEDAzureResult3.Write(GpioPinValue.Low);
+                }
+                if (speed == "slow")
+                {
+                    LEDAzureResult3.Write(GpioPinValue.High);
+                    await Task.Delay(250);
+                    LEDAzureResult3.Write(GpioPinValue.Low);
+                    await Task.Delay(250);
+                    LEDAzureResult3.Write(GpioPinValue.High);
+                    await Task.Delay(250);
+                    LEDAzureResult3.Write(GpioPinValue.Low);
+                    await Task.Delay(250);
+                    LEDAzureResult3.Write(GpioPinValue.High);
+                    await Task.Delay(250);
+                    LEDAzureResult3.Write(GpioPinValue.Low);
+                }
+            }
         }
 
         private async Task UpdateDisplay()
@@ -909,7 +1073,10 @@ namespace Slot
                 ShowWinResultItem("TripleService");
 
                 Log_Event(1, "Triple Service Win", "SpinEvent", "UserAction", CurrentGameID);
-                
+
+                FlashLED1("slow");
+                FlashLED2("slow");
+                FlashLED3("slow");
             }
 
             if (IconWinResult != "TripleServiceWin")
@@ -927,6 +1094,25 @@ namespace Slot
 
                     //Transmit Result to Azure
                     Log_Event(1, "Double Service Win", "SpinEvent", "UserAction", CurrentGameID);
+
+
+                    if (AzureResult1 == AzureResult2)
+                    {
+                        FlashLED1("slow");
+                        FlashLED2("slow");
+                    }
+                    if (AzureResult1 == AzureResult3)
+                    {
+                        FlashLED1("slow");
+                        FlashLED3("slow");
+                    }
+                    if (AzureResult2 == AzureResult3)
+                    {
+                        FlashLED2("slow");
+                        FlashLED3("slow");
+                    }
+
+
 
                 }
             }
